@@ -29,8 +29,11 @@ function RunLoanProgam(){
         errorMessageDisplay.innerHTML=errorMessage;
     }
 
+    //Calculate Amortization Schedule
     let amortizationList=CalculateAmortizationSchedule(loanAmountInput,loanTermInputMonths, interestRate);
 
+    //Display Amortization Schedule to Screen
+    DisplayAmortizationSchedule(amortizationList);
 }
 
 //function to check if a number is a float
@@ -79,8 +82,8 @@ function CalculateAmortizationSchedule(loanAmountInput,loanTermInputMonths, inte
 }
 
 //function to calculate Interest Payment per period
-function CalculatePeriodInterestPayment( remainingBalanace, interestRate){
-    return remainingBalanace*interestRate/1200;
+function CalculatePeriodInterestPayment( remainingBalance, interestRate){
+    return remainingBalance*interestRate/1200;
 }
 
 //function to calculate principal payment
@@ -92,3 +95,32 @@ function CalculatePrincipalPayment(totalMonthlyPayment,interestPayment){
 function CalculateRemainingBalance(previousBalance,principalPayment){
     return previousBalance-principalPayment;
 }
+
+//function to display the amortization schedule on the page
+function DisplayAmortizationSchedule(amortizationList){
+    
+    let tableResults=document.getElementById("table-body");
+    let insertedTextRow="";
+    for(let i=0;i<amortizationList.length;i++){
+        insertedTextRow+=
+        `
+        <tr>
+            <td>${amortizationList[i].monthNumber}</td>
+            <td>${formatter.format(amortizationList[i].totalMonthlyPayment)}</td>
+            <td>${formatter.format(amortizationList[i].principalPayment)}</td>
+            <td>${formatter.format(amortizationList[i].interestPayment)}</td>
+            <td>${formatter.format(amortizationList[i].totalCumulativeInterest)}</td>
+            <td>${formatter.format(amortizationList[i].remainingBalance)}</td>
+        </tr>
+        `;
+    }
+    tableResults.innerHTML=insertedTextRow;
+
+}
+
+//Number formatter
+const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2
+  })
