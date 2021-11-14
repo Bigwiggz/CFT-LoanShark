@@ -23,7 +23,7 @@ function RunLoanProgam(){
         let errorMessageDisplay=document.getElementById("validation-summary");
         errorMessageDisplay.innerHTML=errorMessage;
     }
-    else if(isFloat(interestRate)===false){
+    else if(isFloat(interestRate)===false && Number.isInteger(interestRate)===false){
         let errorMessage=`The interest rate of ${interestRate} is not a valid amount for the interest`;
         let errorMessageDisplay=document.getElementById("validation-summary");
         errorMessageDisplay.innerHTML=errorMessage;
@@ -34,6 +34,9 @@ function RunLoanProgam(){
 
     //Display Amortization Schedule to Screen
     DisplayAmortizationSchedule(amortizationList);
+
+    //Display Summary Results
+    DisplaySummaryResults(amortizationList,loanAmountInput);
 }
 
 //function to check if a number is a float
@@ -115,6 +118,20 @@ function DisplayAmortizationSchedule(amortizationList){
         `;
     }
     tableResults.innerHTML=insertedTextRow;
+
+}
+
+//Display Summary Results
+function DisplaySummaryResults(amortizationList, totalPrincipalAmount){
+    let totalInterest=amortizationList[amortizationList.length-1].totalCumulativeInterest;
+    let totalCost=totalPrincipalAmount+totalInterest;
+    let monthlyAmount=amortizationList[amortizationList.length-1].totalMonthlyPayment;
+
+    //Display values to screen
+    document.getElementById("totalMonthlyAmounts").innerHTML=formatter.format(monthlyAmount);
+    document.getElementById("totalPrincipalAmount").innerHTML=formatter.format(totalPrincipalAmount);
+    document.getElementById("totalInterest").innerHTML=formatter.format(totalInterest);
+    document.getElementById("totalCost").innerHTML=formatter.format(totalCost);
 
 }
 
